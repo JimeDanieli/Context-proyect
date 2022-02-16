@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+ import {createContext, useContext} from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+ //createContext recibe como argumento un valor como defecto, puede ser cualquier tipo de dato 
+const ContextDefault = createContext('default value') 
+const Context2= createContext('default value2')
+//un provider es el encargado de pasar contexto hacia abajo, a los componentes hijos
+const DefaultProvider=({children}) =>{
+  return(
+    <ContextDefault.Provider value={'my value'}>
+      {children}
+    </ContextDefault.Provider>
+  )
+}
+const Content=()=>{
+  const ctx=useContext(ContextDefault)
+  return(
+    <div>{ctx}</div>
+  )
+}
+const Content2=()=>{
+  const ctx=useContext(Context2)
+  return(
+    <div>{ctx}</div>
+  )
+}
+//sin provider si se pasa el valor por defecto
+function App() { 
+   return (
+    <DefaultProvider>
+      <Content/>
+      <Content2/>
+    </DefaultProvider>
   );
 }
 
