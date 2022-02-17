@@ -1,34 +1,49 @@
-import {createContext,useContext,useState } from "react";
+import {createContext, useContext, useState} from 'react'
 
-const Context =createContext({valor:false, toggle:()=>{}})
-//nuestro provider va a sacar value y setValue desde useState
-const Provider=({children}) =>{
-    const [valor, setValue]= useState(false)
-    const value={
-        valor,
-        toggle:()=> setValue(!valor)
-    }
+const Context=createContext()
 
-    return (
-        <Context.Provider value={value}>
+const ContadorProvider=({children}) =>{
+    const [contador, setCont] =useState(0)
+
+    const increment=()=>setCont(contador + 1)
+    const decrement =()=> setCont(contador - 1)
+
+    return(
+        <ContadorProvider value={contador, increment, decrement}>
             {children}
-        </Context.Provider>
+        </ContadorProvider>
     )
 }
-const Component= ()=>{
-    const {valor,toggle}= useContext(Context)
+
+const Increment=()=>{
+    console.log('increment')
+    const {increment} =useContext(Context)
     return(
-        <div>
-            <label>{valor.toString() } </label>
-            <button onClick={toggle}>Toggle</button>
-        </div>
+        <button onClick={increment}>Increment</button>
     )
-}//Pasamos el value a string porque es un boolean y react no esta imprimiendo booleans en este momento, entonces asi nos aseguramos de que llegue algo
+}
+const Decrement=()=>{
+    console.log('decrement')
+    const {decrement}= useContext(Context)
+    return(
+        <button onClick={decrement}>Decrement</button>
+    )
+}
+const Label=()=>{
+    console.log('Label')
+    const {contador}= useContext(Context)
+    return(
+        <h1>{contador} </h1>
+    )
+}
+
 const App=()=>{
-    return (
-        <Provider>
-            <Component/>
-        </Provider>
+    return(
+        <ContadorProvider>
+            <Label/>
+            <Increment/>
+            <Decrement/>
+        </ContadorProvider>
     )
 }
 
